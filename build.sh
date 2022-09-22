@@ -6,7 +6,7 @@ revision=$2
 dockerHubUsername=cfgglobal
 dockerHubPassword=$3
 imageTag=cfgglobal
-imageName="unique:flash-fx-payment-ui-$revision"
+imageName="unique:flash-fx-payment-ui-$revision-$env"
 publishFolder="dist-$env"
 
 echo -e "\n\nEnv: $Env, env: $env, Version: $revision, ImageName: $imageName"
