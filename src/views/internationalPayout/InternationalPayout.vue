@@ -248,7 +248,9 @@
 
           <el-form-item label="Select a sender" prop="senderId">
 
-            <el-select v-model="stepTwoForm.senderId" placeholder="please select a sender" style="width: 400px"
+            <el-select v-model="stepTwoForm.senderId" placeholder="please select a sender"
+                       @change="handleChooseSender"
+                       style="width: 400px"
                        filterable>
 
 
@@ -270,7 +272,9 @@
 
           <el-form-item label="Select a sub-client" prop="subclientId" style="margin-top: 15px">
 
-            <el-select v-model="stepTwoForm.subclientId" placeholder="please select a sub-client" style="width: 400px"
+            <el-select v-model="stepTwoForm.subclientId" placeholder="please select a sub-client"
+                       @change="handleChooseSubclient"
+                       style="width: 400px"
                        filterable>
 
 
@@ -800,7 +804,7 @@ export default defineComponent({
       newSendFund.recipientId = stepThirdForm.recipientId
       newSendFund.externalReference = stepThirdForm.paymentReference
       newSendFund.externalId = ""
-      newSendFund.subClientId = ""
+      newSendFund.subClientId = stepTwoForm.subclientId
       newSendFund.callbackUri = ""
 
       await postSendFund(newSendFund);
@@ -827,6 +831,21 @@ export default defineComponent({
 
 
     };
+    const handleChooseSender = async () => {
+
+      console.log("ffrfr")
+      stepTwoForm.subclientId = ""
+
+
+    };
+    const handleChooseSubclient = async () => {
+
+      console.log("ffrfr")
+
+      stepTwoForm.senderId = ""
+    };
+
+
 
     const confirmCancelSend = async () => {
 
@@ -905,7 +924,9 @@ export default defineComponent({
       getRecipientsRef,
       getSubclientsRef,
       handleSelectCurrency,
-      donePayout
+      donePayout,
+      handleChooseSender,
+      handleChooseSubclient
 
 
     };
