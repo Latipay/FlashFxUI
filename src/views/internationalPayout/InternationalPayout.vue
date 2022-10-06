@@ -811,6 +811,7 @@ export default defineComponent({
 
       if (!postErrorRef.value) {
         loadingRef.value = false;
+        console.log("333333" + postErrorRef.value)
 
         stepIndex.value = 4;
 

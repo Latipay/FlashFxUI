@@ -7,7 +7,7 @@ import { Merchant } from "@/views/merchants/Merchant.model";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/internationalPayout/internationalPayout",
     component: () => import("@/layout/Layout.vue"),
     children: [
 
