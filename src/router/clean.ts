@@ -6,13 +6,13 @@ import JwtService from "@/core/services/JwtService";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/internationalPayout/internationalPayout",
     component: () => import("@/layout/Layout.vue"),
     children: [
       {
-        path: "/dashboard",
-        name: "dashboard",
-        component: () => import("@/views/Dashboard.vue"),
+        path: "/internationalPayout/internationalPayout",
+        name: "internationalPayout",
+        component: () => import("@/views/internationalPayout/internationalPayout.vue"),
       },
     ],
   },

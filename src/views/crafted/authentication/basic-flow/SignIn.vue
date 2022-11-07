@@ -221,7 +221,7 @@ export default defineComponent({
           },
         }).then(function () {
           // Go to page after successfully login
-          router.push({ name: "merchants" });
+          router.push({ name: "internationalPayout" });
         });
       } else {
         console.log("12");

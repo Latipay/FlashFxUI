@@ -23,7 +23,7 @@
       <div class="card-body">
         <span style="color: gray"><strong>AUD</strong></span>
         <h1 v-loading="refreshPending">AU$
-          {{ getAccountBalanceRef ? (getAccountBalanceRef[0] ? getAccountBalanceRef[0].cleared : '') : '' }}</h1>
+          {{ getAccountBalanceRef ? (getAccountBalanceRef[0] ? getAccountBalanceRef[0].cleared.toFixed(2) : '') : '' }}</h1>
 
 
       </div>
@@ -95,6 +95,7 @@
                   v-model="stepOneForm.sendAmount"
                   type="number"
                   style="width: 400px"
+                  :precision="3"
                   :controls="false"
                   @change="handleSendAmountChange"
               >
@@ -106,7 +107,7 @@
                   v-model="stepOneForm.receivedAmount"
                   style="width: 400px"
                   type="number"
-                  :precision="2" :step="0.1"
+                  :precision="3" :step="0.1"
                   :controls="false"
                   class="input-with-select"
                   @change="handleReceivedAmountChange"
@@ -116,12 +117,27 @@
                              @change="handleSelectCurrency"
                              style="width: 115px;background-color:transparent;">
                     <el-option label="USD" value="USD"/>
-                    <el-option label="AUD" value="AUD"/>
                     <el-option label="NZD" value="NZD"/>
                     <el-option label="EUR" value="EUR"/>
                     <el-option label="GBP" value="GBP"/>
                     <el-option label="HKD" value="HKD"/>
                     <el-option label="SGD" value="SGD"/>
+                    <el-option label="AED" value="AED"/>
+                    <el-option label="CAD" value="CAD"/>
+                    <el-option label="CHF" value="CHF"/>
+                    <el-option label="CNY" value="CNY"/>
+                    <el-option label="DKK" value="DKK"/>
+                    <el-option label="ILS" value="ILS"/>
+                    <el-option label="INR" value="INR"/>
+                    <el-option label="JPY" value="JPY"/>
+                    <el-option label="MXN" value="MXN"/>
+                    <el-option label="MYR" value="MYR"/>
+                    <el-option label="NOK" value="NOK"/>
+                    <el-option label="PHP" value="PHP"/>
+                    <el-option label="SEK" value="SEK"/>
+                    <el-option label="THB" value="THB"/>
+                    <el-option label="TRY" value="TRY"/>
+                    <el-option label="ZAR" value="ZAR"/>
                   </el-select>
                 </template>
               </el-input>
@@ -497,7 +513,7 @@ export default defineComponent({
 
 
     const stepOneForm = reactive({
-      sendAmount: "200.00",
+      sendAmount: "200.000",
       receivedAmount: "",
       receivedCurrency: "EUR"
     });
@@ -531,31 +547,38 @@ export default defineComponent({
     });
 
     const handleReceivedAmountChange = async (value: number) => {
+      loadingRef.value = true;
       console.log(value)
-      stepOneForm.receivedAmount = Number(value).toFixed(2);
+      stepOneForm.receivedAmount = Number(value).toFixed(3);
       await getQuoteRef(stepOneForm.receivedCurrency, stepOneForm.receivedCurrency, stepOneForm.receivedAmount.toString());
-      stepOneForm.sendAmount = quoteRef.value ? Number(quoteRef.value.fromAmount).toFixed(2) : ''
+      stepOneForm.sendAmount = quoteRef.value ? Number(quoteRef.value.fromAmount).toFixed(3) : ''
       console.log(quoteRef)
+      loadingRef.value = false;
     }
     const handleSendAmountChange = async (value: number) => {
       console.log(value)
-      stepOneForm.sendAmount = Number(value).toFixed(2)
+      loadingRef.value = true;
+      stepOneForm.sendAmount = Number(value).toFixed(3)
 
       await getQuoteRef('AUD', stepOneForm.receivedCurrency, stepOneForm.sendAmount.toString());
-      stepOneForm.receivedAmount = quoteRef.value ? Number(quoteRef.value.toAmount).toFixed(2) : ''
+      stepOneForm.receivedAmount = quoteRef.value ? Number(quoteRef.value.toAmount).toFixed(3) : ''
       console.log(quoteRef)
-
+      loadingRef.value = false;
     }
 
     const handleSelectCurrency = async (value: string) => {
       console.log(value)
+      loadingRef.value = true;
       // stepOneForm.sendAmount = Number(value).toFixed(2)
       if (stepOneForm.sendAmount) {
+
         await getQuoteRef('AUD', stepOneForm.receivedCurrency, stepOneForm.sendAmount.toString());
+        loadingRef.value = false;
       } else {
         await getQuoteRef('AUD', stepOneForm.receivedCurrency, "200");
+        loadingRef.value = false;
       }
-      stepOneForm.receivedAmount = quoteRef.value ? Number(quoteRef.value.toAmount).toFixed(2) : ''
+      stepOneForm.receivedAmount = quoteRef.value ? Number(quoteRef.value.toAmount).toFixed(3) : ''
       console.log(quoteRef)
 
     }
@@ -584,7 +607,7 @@ export default defineComponent({
       await getBalance();
 
       await getQuoteRef('AUD', stepOneForm.receivedCurrency, stepOneForm.sendAmount.toString());
-      stepOneForm.receivedAmount = quoteRef.value ? Number(quoteRef.value.toAmount).toFixed(2) : ''
+      stepOneForm.receivedAmount = quoteRef.value ? Number(quoteRef.value.toAmount).toFixed(3) : ''
 
 
     });
@@ -792,6 +815,7 @@ export default defineComponent({
 
       console.log("ffrfr")
       const newSendFund = new AddSendFund();
+      loadingRef.value = true;
 
       newSendFund.fromCurrency = "AUD"
       newSendFund.toCurrency = stepOneForm.receivedCurrency
@@ -812,7 +836,6 @@ export default defineComponent({
       if (!postErrorRef.value) {
         loadingRef.value = false;
         console.log("333333" + postErrorRef.value)
-
         stepIndex.value = 4;
 
         sendFundSuccess.value = true;
