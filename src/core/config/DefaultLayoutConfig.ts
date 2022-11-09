@@ -8,15 +8,15 @@ const config: LayoutConfigTypes = {
     type: "default",
     primaryColor: "#009EF7",
     logo: {
-      dark: "media/logos/logo-lp.png",
-      light: "media/logos/logo-lp.png",
+      dark: "media/logos/cfg-logo.png",
+      light: "media/logos/cfg-logo.png",
     },
   },
   illustrations: {
     set: "sketchy-1",
   },
   loader: {
-    logo: "media/logos/logo-lp.png",
+    logo: "media/logos/cfg-logo.png",
     display: true,
     type: "default",
   },
@@ -42,7 +42,7 @@ const config: LayoutConfigTypes = {
   },
   aside: {
     display: true,
-    theme: "dark",
+    theme: "light",
     fixed: true,
     menuIcon: "svg",
     minimized: false,

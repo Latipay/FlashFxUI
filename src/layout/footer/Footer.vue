@@ -16,7 +16,7 @@
           href="https://keenthemes.com/"
           target="_blank"
           class="text-gray-800 text-hover-primary"
-          >Latipay</a
+          >CFG Global</a
         >
       </div>
       <!--end::Copyright-->
