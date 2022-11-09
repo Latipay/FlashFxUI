@@ -101,6 +101,7 @@
               >
                 <template #prepend>AUD</template>
               </el-input>
+              <br/><div style="color: darkred">Minimum amount 200 AUD</div>
             </el-form-item>
             <el-form-item label="They receive" required prop="receivedAmount">
               <el-input
@@ -151,7 +152,8 @@
           </el-col>
           <el-col :span="20">
             <el-form-item>
-              <el-button type="primary" @click="onToStepTwo">Next</el-button>
+              <el-button type="primary" @click="onToStepTwo" disabled v-if="stepOneForm.sendAmount < 200">Next</el-button>
+              <el-button type="primary" @click="onToStepTwo" v-if="stepOneForm.sendAmount >=200">Next</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -812,10 +814,9 @@ export default defineComponent({
 
 
     const sendFund = async () => {
-
+      loadingRef.value = true;
       console.log("ffrfr")
       const newSendFund = new AddSendFund();
-      loadingRef.value = true;
 
       newSendFund.fromCurrency = "AUD"
       newSendFund.toCurrency = stepOneForm.receivedCurrency
@@ -839,10 +840,12 @@ export default defineComponent({
         stepIndex.value = 4;
 
         sendFundSuccess.value = true;
+        refreshBalance()
 
 
       } else {
         failAlert("Something wrong happened! Please have a check.");
+        refreshBalance()
       }
 
 
