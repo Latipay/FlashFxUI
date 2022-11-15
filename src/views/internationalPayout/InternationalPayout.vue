@@ -310,6 +310,15 @@
 
           </el-form-item>
 
+          OR
+
+          <el-form-item label="CFG As Sender" prop="cfgIsSender" style="margin-top: 15px">
+
+            <el-checkbox v-model="cfgSenderValue"     @change="handleChooseCFG" label="" size="large" />
+
+
+          </el-form-item>
+
           <!--          <span-->
           <!--              style="     margin-left: 180px;-->
 
@@ -360,7 +369,7 @@
     </div>
 
 
-    <div v-if="stepIndex === 3">
+    <div v-if="stepIndex === 3" v-loading="loadingRef">
 
       <div v-if="!sendFundSuccess"
            style="display: flex;justify-content: center;margin-bottom: 15px;margin-top: 20px;width: 100%">
@@ -510,7 +519,7 @@ export default defineComponent({
     const showSend = ref(false);
     const currencies = EnumsConstant.CurrencyCode;
     const dialogVisible = ref(false)
-
+    const cfgSenderValue = ref(false)
     const activeIndex = ref('0')
 
 
@@ -748,7 +757,7 @@ export default defineComponent({
       }
       try {
         await form.validate();
-        if (stepTwoForm.senderId || stepTwoForm.subclientId) {
+        if (stepTwoForm.senderId || stepTwoForm.subclientId || cfgSenderValue.value) {
           stepIndex.value = 2
           await getRecipientData();
 
@@ -826,19 +835,24 @@ export default defineComponent({
       newSendFund.reason = stepThirdForm.paymentReason
       newSendFund.sourceOfFunds = stepThirdForm.sourceOfFund
       newSendFund.senderId = stepTwoForm.senderId
+      newSendFund.subClientId = stepTwoForm.subclientId
+      // newSendFund.subClientId = "631eb0ff966ae6f807e692a5"
+      // newSendFund.senderId = ""
       newSendFund.recipientId = stepThirdForm.recipientId
       newSendFund.externalReference = stepThirdForm.paymentReference
       newSendFund.externalId = ""
-      newSendFund.subClientId = stepTwoForm.subclientId
+
       newSendFund.callbackUri = ""
+
+      console.log(newSendFund)
 
       await postSendFund(newSendFund);
 
       if (!postErrorRef.value) {
-        loadingRef.value = false;
+
         console.log("333333" + postErrorRef.value)
         stepIndex.value = 4;
-
+        loadingRef.value = false;
         sendFundSuccess.value = true;
         refreshBalance()
 
@@ -862,15 +876,25 @@ export default defineComponent({
 
       console.log("ffrfr")
       stepTwoForm.subclientId = ""
-
+      cfgSenderValue.value = false
 
     };
     const handleChooseSubclient = async () => {
 
       console.log("ffrfr")
-
+      cfgSenderValue.value = false
       stepTwoForm.senderId = ""
     };
+
+    const  handleChooseCFG = async () => {
+
+      console.log(cfgSenderValue.value)
+
+      stepTwoForm.senderId = ""
+      stepTwoForm.subclientId = ""
+
+    };
+
 
 
 
@@ -953,7 +977,9 @@ export default defineComponent({
       handleSelectCurrency,
       donePayout,
       handleChooseSender,
-      handleChooseSubclient
+      handleChooseSubclient,
+      cfgSenderValue,
+      handleChooseCFG
 
 
     };
